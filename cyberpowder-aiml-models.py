@@ -1266,7 +1266,8 @@ We'll upload the polynomial regression model as an example.
 
 # %%
 # Save the polynomial regression model to ONNX and upload to Hugging Face
-poly_model_name = "polynomial_regression_model"
+
+poly_model_name = f"polynomial_regression_model_{username}"
 poly_model_version = "0.0.1"  # alpha version
 
 """
