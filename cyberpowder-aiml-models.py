@@ -824,7 +824,7 @@ target variable. This can help improve the model's performance if the
 relationship between the input features and the target variable is not linear.
 """
 
-%% [markdown]
+# %% [markdown]
 """
 ### Polynomial Regression Model Class
 """
@@ -1109,6 +1109,34 @@ their fits.
 """
 
 # %%
+# Create a meshgrid for visualization
+x1_range = np.linspace(X_test.cpu().numpy()[:,0].min(), X_test.cpu().numpy()[:,0].max(), 20)
+x2_range = np.linspace(X_test.cpu().numpy()[:,1].min(), X_test.cpu().numpy()[:,1].max(), 20)
+X1, X2 = np.meshgrid(x1_range, x2_range)
+
+# Create tensor grid points for predictions
+grid_points = []
+for i in range(X1.shape[0]):
+    for j in range(X1.shape[1]):
+        grid_points.append([X1[i,j], X2[i,j]])
+grid_tensor = torch.tensor(grid_points, dtype=torch.float32).to(device)
+
+# Get predictions for grid points
+with torch.no_grad():
+    grid_preds = poly_model(grid_tensor).cpu().numpy()
+
+# Reshape predictions to match grid
+Z_poly = grid_preds.reshape(X1.shape)
+
+# Sample test points for visualization (to reduce clutter)
+sample_indices = np.random.choice(X_test.shape[0], size=min(100, X_test.shape[0]), replace=False)
+X_test_sample = X_test[sample_indices].cpu().numpy()
+y_test_sample = y_test[sample_indices].cpu().numpy()
+
+# Create a grid tensor from the meshgrid points for the linear model predictions
+grid_points = np.column_stack([X1.flatten(), X2.flatten()])
+grid_tensor = torch.tensor(grid_points, dtype=torch.float32).to(device)
+
 # Get linear model predictions for the same grid
 model_split.eval()
 with torch.no_grad():
