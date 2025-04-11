@@ -36,7 +36,7 @@ Prerequisites:
 
 # %%
 # Install required packages (various other required packages are already available in the colab environment)
-# !uv -q pip install datasets onnx onnxruntime
+# !pip install datasets onnx onnxruntime
 
 # %%
 # Import required packages
